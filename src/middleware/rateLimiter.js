@@ -1,3 +1,5 @@
+const { errorResponse } = require('../utils/errorResponse');
+
 const rateLimit = {};
 module.exports = (req, res, next) => {
   const key = req.ip;
@@ -5,7 +7,7 @@ module.exports = (req, res, next) => {
   if (!rateLimit[key]) rateLimit[key] = [];
   rateLimit[key] = rateLimit[key].filter(t => now - t < 60000);
   if (rateLimit[key].length >= 100) {
-    return res.status(429).json({ error: 'Rate limit exceeded' });
+    return errorResponse(res, 429, 'Rate limit exceeded');
   }
   rateLimit[key].push(now);
   next();

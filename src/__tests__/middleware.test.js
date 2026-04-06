@@ -22,7 +22,7 @@ describe('Auth middleware', () => {
   it('returns 401 when no authorization header is present', () => {
     authMiddleware(req, res, next);
     expect(res.status).toHaveBeenCalledWith(401);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Authentication required' });
+    expect(res.json).toHaveBeenCalledWith({ error: { code: 401, message: 'Authentication required' } });
     expect(next).not.toHaveBeenCalled();
   });
 
@@ -30,7 +30,7 @@ describe('Auth middleware', () => {
     req.headers.authorization = 'Bearer invalid-token';
     authMiddleware(req, res, next);
     expect(res.status).toHaveBeenCalledWith(401);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Invalid token' });
+    expect(res.json).toHaveBeenCalledWith({ error: { code: 401, message: 'Invalid token' } });
     expect(next).not.toHaveBeenCalled();
   });
 
@@ -75,6 +75,6 @@ describe('Rate limiter middleware', () => {
     }
     rateLimiter(req, res, next);
     expect(res.status).toHaveBeenCalledWith(429);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Rate limit exceeded' });
+    expect(res.json).toHaveBeenCalledWith({ error: { code: 429, message: 'Rate limit exceeded' } });
   });
 });
