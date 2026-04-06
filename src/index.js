@@ -2,6 +2,11 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const { logger } = require('./utils/logger');
+const { validateEnv } = require('./utils/validateEnv');
+
+if (process.env.NODE_ENV !== 'test') {
+  validateEnv();
+}
 
 const app = express();
 app.use(helmet());
